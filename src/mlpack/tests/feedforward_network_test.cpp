@@ -192,6 +192,45 @@ TEST_CASE("CheckCopyMovingReparametrizationNetworkTest",
 }
 
 /**
+ * Check whether copying and moving network with Join is working or not.
+ */
+TEST_CASE("CheckCopyMovingJoinNetworkTest",
+          "[FeedForwardNetworkTest]")
+{
+  // Load the dataset.
+  arma::mat trainData;
+  data::Load("thyroid_train.csv", trainData, true);
+
+  // Normalize labels to [0, 2].
+  arma::mat trainLabels = trainData.row(trainData.n_rows - 1) - 1;
+  trainData.shed_row(trainData.n_rows - 1);
+
+  /*
+   * Construct a feed forward network with trainData.n_rows input nodes.
+   */
+
+  FFN<NegativeLogLikelihood<> > *model = new FFN<NegativeLogLikelihood<> >;
+  model->Add<Linear<> >(trainData.n_rows, 8);
+  model->Add<SigmoidLayer<> >();
+  model->Add<Join<> >();
+  model->Add<Linear<> >(8, 3);
+  model->Add<LogSoftMax<> >();
+
+  FFN<NegativeLogLikelihood<> > *model1 = new FFN<NegativeLogLikelihood<> >;
+  model->Add<Linear<> >(trainData.n_rows, 8);
+  model->Add<SigmoidLayer<> >();
+  model->Add<Join<> >();
+  model->Add<Linear<> >(8, 3);
+  model->Add<LogSoftMax<> >();
+
+  // Check whether copy constructor is working or not.
+  CheckCopyFunction<>(model, trainData, trainLabels, 1);
+
+  // Check whether move constructor is working or not.
+  CheckMoveFunction<>(model1, trainData, trainLabels, 1);
+}
+
+/**
  * Check whether copying and moving network with linear3d is working or not.
  */
 TEST_CASE("CheckCopyMovingLinear3DNetworkTest", "[FeedForwardNetworkTest]")

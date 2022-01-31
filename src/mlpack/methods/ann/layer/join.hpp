@@ -36,6 +36,18 @@ class Join
   //! Create the Join object.
   Join();
 
+  //! Copy constructor
+  Join(const Join& layer);
+
+  //! Move Constructor
+  Join(Join&&);
+
+  //! Copy assignment operator
+  Join& operator=(const Join& layer);
+
+  //! Move assignment operator
+  Join& operator=(Join&& layer);
+
   /**
    * Ordinary feed forward pass of a neural network, evaluating the function
    * f(x) by propagating the activity forward through f.

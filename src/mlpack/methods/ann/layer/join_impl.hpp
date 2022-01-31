@@ -27,6 +27,46 @@ Join<InputDataType, OutputDataType>::Join() :
 }
 
 template<typename InputDataType, typename OutputDataType>
+Join<InputDataType, OutputDataType>::Join(const Join& layer) :
+inSizeRows(layer.inSizeRows),
+inSizeCols(layer.inSizeCols)
+{
+  // Nothing to do here.
+}
+
+template<typename InputDataType, typename OutputDataType>
+Join<InputDataType, OutputDataType>::Join(Join&& layer) :
+inSizeRows(0),
+inSizeCols(0)
+{
+  // Nothing to do here.
+}
+
+template<typename InputDataType, typename OutputDataType>
+Join<InputDataType, OutputDataType>& 
+Join<InputDataType, OutputDataType>::operator=(const Join& layer)
+{
+  if (this != &layer)
+  {
+    inSizeRows = layer.inSizeRows;
+    inSizeCols = layer.inSizeCols;
+  }
+  return *this;
+}
+
+template<typename InputDataType, typename OutputDataType>
+Join<InputDataType, OutputDataType>& 
+Join<InputDataType, OutputDataType>::operator=(Join&& layer)
+{
+  if (this != &layer)
+  {
+    inSizeRows = 0;
+    inSizeCols = 0;
+  }
+  return *this;
+}
+
+template<typename InputDataType, typename OutputDataType>
 template<typename InputType, typename OutputType>
 void Join<InputDataType, OutputDataType>::Forward(
     const InputType& input, OutputType& output)
